@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/node": "^9.2.2",
+    "@circle-fin/developer-controlled-wallets": "^8.0.0",
     "astro": "^5.8.0",
     "viem": "^2.30.0"
   }
