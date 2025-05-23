@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { actions } from 'astro:actions';
+
+const approveUsdcResponse = Astro.getActionResult(actions.approveUsdc);
+if (approveUsdcResponse && !approveUsdcResponse.error) {
+  Astro.session?.set('sourceWalletId', approveUsdcResponse.data.sourceWalletId);
+	Astro.session?.set('authorizedAmount', approveUsdcResponse.data.authorizedAmount);
+  Astro.session?.set('approveTxId', approveUsdcResponse.data.id);
+  return Astro.redirect('/burn-usdc');
+}
+---
+
+<BaseLayout title="Approve USDC">
+  <section>
+		<h2>Approve USDC Sepolia from source wallet</h2>
+		<p>This first step is to grant approval for the TokenMessengerV2 contract deployed on the source chain to withdraw USDC from your wallet on that source chain. This allows the contract to withdraw the specified amount of USDC from the specified wallet address.</p>
+	</section>
+  <section>
+    
+    <form method="POST" action={actions.approveUsdc}>
+      <div class="input-wrapper">
+        <label for="sourceWalletId">Wallet ID</label>
+        <input type="text" id="sourceWalletId" name="sourceWalletId" placeholder="0x5a65e51e5fae3ef18b8dbe73aaf2673fc29e42c5" required />
+      </div>
+
+      <div class="input-wrapper">
+        <label for="authorizedAmount">Amount (USDC)</label>
+        <input type="number" id="authorizedAmount" name="authorizedAmount" placeholder="100" required />
+      </div>
+      <button>Approve</button>
+    </form>
+
+    {approveUsdcResponse?.error && <p>Transaction failed. Please check your transaction logs for details.</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  h2 {
+    text-align: center;
+    margin-block-end: var(--space-xs);
+  }
+
+  form {
+		max-width: 20em;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-m);
+		margin-inline: auto;
+	}
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

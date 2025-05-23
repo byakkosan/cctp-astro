@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { actions } from 'astro:actions';
+
+const initialSetupResponse = Astro.getActionResult(actions.initialSetup);
+
+if (initialSetupResponse && !initialSetupResponse.error) {
+	Astro.session?.set('sourceChain', initialSetupResponse.data.sourceChain);
+	Astro.session?.set('destinationChain', initialSetupResponse.data.destinationChain);
+  return Astro.redirect('/approve-usdc');
+}
+---
+
+<BaseLayout>
+	<section>
+		<h1>Transfer USDC across chains</h1>
+		<p>Circle's Cross-Chain Transfer Protocol enables USDC to be sent across blockchains without the need to be converted into a asset. All transfers are permissionless and executed on-chain.</p>
+	</section>
+
+	<form method="POST" action={actions.initialSetup}>
+		<div class="select-wrapper">
+			<label for="sourceChain">Source chain:</label>
+			<select name="sourceChain" id="sourceChain">
+				<option value="">-- Select --</option>
+				<option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
+			</select>
+		</div>
+
+		<div class="select-wrapper">
+			<label for="destinationChain">Destination chain:</label>
+			<select name="destinationChain" id="destinationChain">
+				<option value="">-- Select --</option>
+				<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+			</select>
+		</div>
+
+		<button>Start</button>
+	</form>
+</BaseLayout>
+
+<style>
+	h1 {
+		background-image: var(--theme-gradient);
+    background-clip: text;
+    text-align: center;
+    font-size: var(--step-5);
+    color: transparent;
+		margin-block-end: var(--space-xs);
+		line-height: 1.1;
+	}
+	
+	form {
+		max-width: 20em;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-m);
+		margin-inline: auto;
+	}
+
+	.select-wrapper {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: var(--space-3xs);	
+	}
+</style>

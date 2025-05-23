@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sourceChain = await Astro.session?.get('sourceChain');
+const destinationChain = await Astro.session?.get('destinationChain');
+const transferAmount = await Astro.session?.get('transferAmount');
+const recipientAddress = await Astro.session?.get('recipientAddress');
+const approveTxId = await Astro.session?.get('approveTxId');
+const burnTxId = await Astro.session?.get('burnTxId');
+const receiveTxId = await Astro.session?.get('receiveTxId');
+---
+
+<BaseLayout>
+	<section>
+		<h2>Transfer summary</h2>
+		<div>
+			<p>From: {sourceChain}</p>
+			<p>To: {destinationChain}</p>
+			<p>Amount: {transferAmount} USDC</p>
+			<p>Recipient address: {recipientAddress}</p>
+		</div>
+		<div>
+			<p><strong>Transactions</strong></p>
+			<p>Approve: {approveTxId}</p>
+			<p>Burn: {burnTxId}</p>
+			<p>Receive: {receiveTxId}</p>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	h2 {
+    text-align: center;
+    margin-block-end: var(--space-m);
+  }
+
+	p {
+		margin-block-end: var(--space-3xs);
+	}
+
+	div {
+		max-width: 27em;
+		margin-inline: auto;
+		margin-block-end: var(--space-s);
+	}
+</style>

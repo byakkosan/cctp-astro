@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { actions } from 'astro:actions';
+
+const txHash = await Astro.session?.get('txHash');
+const maskedTxHash = txHash.slice(0, 3) + "*".repeat(txHash.length - 3);
+
+const receiveAttestationResponse = Astro.getActionResult(actions.receiveAttestation);
+if (receiveAttestationResponse && !receiveAttestationResponse.error) {
+  Astro.session?.set('message', receiveAttestationResponse.data.message);
+  Astro.session?.set('attestation', receiveAttestationResponse.data.attestation);
+  return Astro.redirect('/mint-usdc');
+}
+---
+<BaseLayout title="Receive Attestation">
+  <section>
+		<h2>Retrieve attestation</h2>
+		<p>At this point, you retrieve the attestation required to complete the CCTP transfer, which is essential for verifying the burn event before proceeding with the transfer. </p>
+	</section>
+  <section>
+    <form method="POST" action={actions.receiveAttestation}>
+      <div class="input-wrapper">
+        <label for="maskedTxHash">Transaction Hash</label>
+        <input type="text" id="maskedTxHash" name="maskedTxHash" value={maskedTxHash} readonly />
+      </div>
+      <button>Submit</button>
+    </form>
+    {receiveAttestationResponse?.error && <p>Transaction failed. Please check your transaction logs for details.</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  h2 {
+    text-align: center;
+    margin-block-end: var(--space-xs);
+  }
+
+  form {
+		max-width: 20em;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-m);
+		margin-inline: auto;
+	}
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

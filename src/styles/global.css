@@ -1,0 +1,121 @@
+:root {
+  /* @link https://utopia.fyi/type/calculator?c=360,18,1.2,1140,20,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --step--2: clamp(0.7813rem, 0.7412rem + 0.1781vi, 0.8681rem);
+  --step--1: clamp(0.9375rem, 0.8894rem + 0.2137vi, 1.0417rem);
+  --step-0: clamp(1.125rem, 1.0673rem + 0.2564vi, 1.25rem);
+  --step-1: clamp(1.35rem, 1.2808rem + 0.3077vi, 1.5rem);
+  --step-2: clamp(1.62rem, 1.5369rem + 0.3692vi, 1.8rem);
+  --step-3: clamp(1.944rem, 1.8443rem + 0.4431vi, 2.16rem);
+  --step-4: clamp(2.3328rem, 2.2132rem + 0.5317vi, 2.592rem);
+  --step-5: clamp(2.7994rem, 2.6558rem + 0.638vi, 3.1104rem);
+  --space-3xs: clamp(0.25rem, calc(0.21rem + 0.19vw), 0.31rem);
+  --space-2xs: clamp(0.5rem, calc(0.42rem + 0.37vw), 0.63rem);
+  --space-xs: clamp(0.75rem, calc(0.67rem + 0.37vw), 0.88rem);
+  --space-s: clamp(1rem, calc(0.88rem + 0.56vw), 1.19rem);
+  --space-m: clamp(1.5rem, calc(1.29rem + 0.93vw), 1.81rem);
+  --space-l: clamp(2rem, calc(1.75rem + 1.11vw), 2.38rem);
+  --space-xl: clamp(3rem, calc(2.63rem + 1.67vw), 3.56rem);
+  --space-2xl: clamp(4rem, calc(3.5rem + 2.22vw), 4.75rem);
+  --space-3xl: clamp(6rem, calc(5.25rem + 3.33vw), 7.13rem);
+
+  --max-container-width: 1160px;
+  --border-radius: 6px;
+  --box-shadow-color: hsla(0, 0%, 0%, 0.1);
+  --box-shadow: 0px 2px 2px var(--box-shadow-color);
+  --theme-gradient: linear-gradient(to right, #5fbfff, #62e2a4);
+}
+
+/* CSS Resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Shared layout styles */
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: 360px;
+  font-size: var(--step-0);
+  font-family: "Century Gothic", Verdana, sans-serif;
+  color: white;
+  background-image: radial-gradient(#3d3652, #1f1a30);
+}
+
+section {
+  max-width: 50em;
+  margin: 0 auto;
+  padding: var(--space-s);
+  margin-block-end: var(--space-m);
+}
+
+/* Standardised element styles */
+label {
+  font-size: var(--step--1);
+  margin-block-end: var(--space-3xs);
+}
+
+input:not([type="submit"]):not([type="file"]) {
+  padding: var(--space-2xs);
+  background: rgba(255, 255, 255, 0.2);
+  border: 0;
+  color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+textarea {
+  padding: var(--space-2xs);
+  background: rgba(255, 255, 255, 0.2);
+  border: 0;
+  color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+select {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  padding: var(--space-2xs);
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTI1NiAxNzkyIDE3OTIiPjxwYXRoIGQ9Ik0xMDI0IDgzMnEwLTI2LTE5LTQ1TDU1NyAzMzlxLTE5LTE5LTQ1LTE5dC00NSAxOUwxOSA3ODdRMCA4MDYgMCA4MzJ0MTkgNDVxMTkgMTkgNDUgMTloODk2cTI2IDAgNDUtMTl0MTktNDV6IiBzdHlsZT0iZmlsbDojZmZmIiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAtMSA0MDIuNDQgMTIzOS44NjQpIi8+PC9zdmc+")
+      no-repeat right 0.4em center / 1.4em,
+    linear-gradient(to left, rgba(255, 255, 255, 0.3) 2.2em, rgba(255, 255, 255, 0.2) 2.2em);
+  color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+}
+
+button {
+  background-image: var(--theme-gradient);
+  border: 0;
+  border-radius: var(--border-radius);
+  padding: var(--space-2xs) var(--space-xs);
+  cursor: pointer;
+}

@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WalletList from '../components/WalletList.astro';
+import { actions } from 'astro:actions';
+
+const createWalletResponse = Astro.getActionResult(actions.createWallet);
+
+if (createWalletResponse && !createWalletResponse.error) {
+  return Astro.redirect(`/wallets`);
+}
+---
+
+<BaseLayout title="Wallets Playground">
+	<main>
+		<section>
+			<h1>Wallets Playground</h1>
+			<p>An admin page to quickly create new wallets and grab IDs and addresses.</p>
+		</section>
+
+		<section>
+			<h2>Create new wallet</h2>
+			<form action={actions.createWallet} method="POST">
+				<div class="select-wrapper">
+					<label for="blockChain">Source chain:</label>
+					<select name="blockChain" id="blockChain">
+						<option value="">-- Select --</option>
+						<option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
+						<option value="AVAX-FUJI">Avalanche Fuji</option>
+						<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+					</select>
+				</div>
+				<button>Create wallet</button>
+			</form>
+			{createWalletResponse?.error && <p>Transaction failed. Please check your transaction logs for details.</p>}
+	</section>
+	<section>
+		<h2>Wallets <small>(1fcfda70-348c-5859-8150-1cee9b5c8db1)</small></h2>
+		<WalletList />
+	</section>
+		
+	</main>
+</BaseLayout>
+
+<style>
+	h1,
+	h2 {
+		margin-block-end: var(--space-xs);
+	}
+
+	small {
+		font-size: var(--step--1);
+	}
+
+	form {
+		display: flex;
+		gap: var(--space-m);
+	}
+
+	.select-wrapper {
+		display: flex;
+		flex-direction: column;
+	}
+
+	button {
+		align-self: end;
+	}
+
+	:global(select) {
+		width: 13em;
+	}
+</style>

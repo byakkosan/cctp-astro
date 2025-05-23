@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { actions } from 'astro:actions';
+
+const message = await Astro.session?.get('message');
+const attestation = await Astro.session?.get('attestation');
+const maskedMessage = maskString(message);
+const maskedAttestation = maskString(attestation);
+
+function maskString(str: string) {
+  const startLength = 3;
+  const endLength = 5;
+  const start = str.slice(0, startLength);
+  const end = str.slice(-endLength);
+  const maskedMiddle = "*".repeat(str.length - startLength - endLength);
+  return start + maskedMiddle + end;
+}
+
+const mintUsdcResponse = Astro.getActionResult(actions.mintUsdc);
+console.log(mintUsdcResponse)
+if (mintUsdcResponse && !mintUsdcResponse.error) {
+  Astro.session?.set('receiveTxId', mintUsdcResponse.data.id);
+  return Astro.redirect(`/txn-summary`);
+}
+---
+
+<BaseLayout title="Mint USDC">
+  <section>
+		<h2>Mint USDC</h2>
+		<p>In this final step, the <code>receiveMessage</code> function is called from the MessageTransmitterV2 contract deployed on the destination chain to mint USDC on it. The function processes the attestation and mints USDC to the specified destination wallet address. This finalizes the CCTP transfer, making the USDC available on the destination chain.</p>
+	</section>
+  <section>
+    <form method="POST" action={actions.mintUsdc}>
+      <div class="input-wrapper">
+        <label for="recipientWalletId">Recipient Wallet ID</label>
+        <input type="text" id="recipientWalletId" name="recipientWalletId" placeholder="0x5a65e51e5fae3ef18b8dbe73aaf2673fc29e42c5" required />
+      </div>
+      <div class="input-wrapper">
+        <label for="maskedMessage">Message</label>
+        <textarea id="maskedMessage" name="maskedMessage" readonly>{maskedMessage}</textarea>
+      </div>
+      <div class="input-wrapper">
+        <label for="maskedAttestation">Attestation</label>
+        <textarea id="maskedAttestation" name="maskedAttestation" readonly>{maskedAttestation}</textarea>
+      </div>
+      <button>Mint</button>
+    </form>
+    {mintUsdcResponse?.error && <p>Transaction failed. Please check your transaction logs for details.</p>}
+  </section>
+</BaseLayout>
+
+<style>
+  h2 {
+    text-align: center;
+    margin-block-end: var(--space-xs);
+  }
+
+  form {
+		max-width: 20em;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-m);
+		margin-inline: auto;
+	}
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  textarea {
+    font-size: var(--step--2);
+  }
+
+  textarea[name="maskedMessage"] {
+    height: 22em;
+  }
+
+  textarea[name="maskedAttestation"] {
+    height: 8em;
+  }
+</style>
