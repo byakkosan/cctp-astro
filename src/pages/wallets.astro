@@ -2,9 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WalletList from '../components/WalletList.astro';
 import { actions } from 'astro:actions';
+import { getSecret } from "astro:env/server";
 
+const secretsConfigured = getSecret('API_KEY') !== '' && getSecret('ENTITY_SECRET') !== '';
 const createWalletResponse = Astro.getActionResult(actions.createWallet);
-
+console.log(secretsConfigured);
 if (createWalletResponse && !createWalletResponse.error) {
   return Astro.redirect(`/wallets`);
 }
@@ -29,12 +31,16 @@ if (createWalletResponse && !createWalletResponse.error) {
 						<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
 					</select>
 				</div>
-				<button>Create wallet</button>
+				{secretsConfigured ? 
+					<button >Create wallet</button> :
+					<button disabled>Create wallet</button>
+				}
 			</form>
+			{!secretsConfigured && <p>Your secrets have not been configured.</p>}
 			{createWalletResponse?.error && <p>Transaction failed. Please check your transaction logs for details.</p>}
 	</section>
 	<section>
-		<h2>Wallets <small>(1fcfda70-348c-5859-8150-1cee9b5c8db1)</small></h2>
+		<h2>Wallets</h2>
 		<WalletList />
 	</section>
 		
@@ -54,6 +60,7 @@ if (createWalletResponse && !createWalletResponse.error) {
 	form {
 		display: flex;
 		gap: var(--space-m);
+		margin-block-end: var(--space-xs);
 	}
 
 	.select-wrapper {

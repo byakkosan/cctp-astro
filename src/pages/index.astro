@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { actions } from 'astro:actions';
+import { getSecret } from "astro:env/server";
 
+const secretsConfigured = getSecret('API_KEY') !== '' && getSecret('ENTITY_SECRET') !== '';
 const initialSetupResponse = Astro.getActionResult(actions.initialSetup);
-
 if (initialSetupResponse && !initialSetupResponse.error) {
 	Astro.session?.set('sourceChain', initialSetupResponse.data.sourceChain);
 	Astro.session?.set('destinationChain', initialSetupResponse.data.destinationChain);
@@ -34,7 +35,11 @@ if (initialSetupResponse && !initialSetupResponse.error) {
 			</select>
 		</div>
 
-		<button>Start</button>
+		{secretsConfigured ? 
+			<button >Start</button> :
+			<button disabled>Start</button>
+			<p>Your secrets have not been configured.</p>
+		}
 	</form>
 </BaseLayout>
 
