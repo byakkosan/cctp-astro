@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { actions } from 'astro:actions';
 import { getSecret } from "astro:env/server";
 
-const secretsConfigured = getSecret('API_KEY') !== '' && getSecret('ENTITY_SECRET') !== '';
+const secretsConfigured = Boolean( getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
 const initialSetupResponse = Astro.getActionResult(actions.initialSetup);
 if (initialSetupResponse && !initialSetupResponse.error) {
 	Astro.session?.set('sourceChain', initialSetupResponse.data.sourceChain);

@@ -4,7 +4,7 @@ import WalletList from '../components/WalletList.astro';
 import { actions } from 'astro:actions';
 import { getSecret } from "astro:env/server";
 
-const secretsConfigured = getSecret('API_KEY') !== '' && getSecret('ENTITY_SECRET') !== '';
+const secretsConfigured = Boolean( getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
 const createWalletResponse = Astro.getActionResult(actions.createWallet);
 console.log(secretsConfigured);
 if (createWalletResponse && !createWalletResponse.error) {

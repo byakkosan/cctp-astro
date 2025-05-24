@@ -11,12 +11,13 @@ interface Wallet {
   updateDate: string;
 }
 
-const secretsConfigured = getSecret('API_KEY') !== '' && getSecret('ENTITY_SECRET') !== '';
+const secretsConfigured = Boolean( getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
 const walletSetId = getSecret('WALLET_SET_ID');
 
 if (walletSetId === '') {
   throw new Error('WALLET_SET_ID is not set. Please set it in your environment variables.');
 }
+
 const url = `https://api.circle.com/v1/w3s/wallets?walletSetId=${walletSetId}`;
 const options = {
   method: 'GET',
