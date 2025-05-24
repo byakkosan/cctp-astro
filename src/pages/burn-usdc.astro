@@ -16,7 +16,7 @@ if (burnUsdcResponse && !burnUsdcResponse.error) {
 <BaseLayout title="Burn USDC on source chain">
   <section>
 		<h2>Burn USDC on source chain</h2>
-		<p>The next step is to call the <code>burnUsdc</code> function from the TokenMessengerV2 contract deployed on the source chain to burn USDC on it.</p>
+		<p>Next, the <code>depositForBurn</code> function from TokenMessengerV2 contract is called to burn USDC on that source chain. For this step, you are interacting with the TokenMessenger contract on the source chain. </p>
 	</section>
   <section>
     <form method="POST" action={actions.burnUsdc}>

@@ -27,7 +27,7 @@ if (mintUsdcResponse && !mintUsdcResponse.error) {
 <BaseLayout title="Mint USDC">
   <section>
 		<h2>Mint USDC</h2>
-		<p>In this final step, the <code>receiveMessage</code> function is called from the MessageTransmitterV2 contract deployed on the destination chain to mint USDC on it. The function processes the attestation and mints USDC to the specified destination wallet address. This finalizes the CCTP transfer, making the USDC available on the destination chain.</p>
+		<p>In this final step, you call the <code>receiveMessage</code> function from the MessageTransmitterV2 contract deployed on the destination chain to mint USDC on that destination chain. The function processes the attestation and mints USDC to the specified destination wallet address. Upon successful completion, the USDC will be available on the destination chain.</p>
 	</section>
   <section>
     <form method="POST" action={actions.mintUsdc}>
