@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.2.2",
-    "@circle-fin/developer-controlled-wallets": "^8.0.0",
-    "astro": "^5.8.0",
-    "viem": "^2.30.0"
+    "@astrojs/node": "^9.3.1",
+    "@circle-fin/developer-controlled-wallets": "^8.4.0",
+    "astro": "^5.12.5",
+    "viem": "^2.33.1"
   }
 }
