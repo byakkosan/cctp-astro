@@ -19,7 +19,8 @@ export const server = {
     handler: async (input) => {
       const accountType = input.blockChain.startsWith("AVAX") ? "EOA" : "SCA";
       const response = await client.createWallets({
-        blockchains: [`${input.blockChain}`],
+        blockchains: [`${input.blockChain}` as any],
+        count: 1,
         accountType: accountType,
         walletSetId: `${getSecret("WALLET_SET_ID")}`,
       });
@@ -43,7 +44,7 @@ export const server = {
       authorizedAmount: z.number(),
     }),
     handler: async (input, context) => {
-      const sourceChain = await context.session?.get("sourceChain");
+      const sourceChain = await context.session?.get("sourceChain") as keyof typeof CCTP_CONFIG.contracts;
       const usdcAmount = BigInt(input.authorizedAmount) * BigInt(10 ** 6);
       const sourceConfig = CCTP_CONFIG.contracts[sourceChain];
       const approveTxResponse = await client.createContractExecutionTransaction({
@@ -63,7 +64,7 @@ export const server = {
       let approveTxStatus;
       do {
         const statusResponse = await client.getTransaction({
-          id: approveTxResponse?.data?.id,
+          id: approveTxResponse?.data?.id as string,
         });
         approveTxStatus = statusResponse?.data?.transaction?.state;
         if (approveTxStatus === "FAILED") {
@@ -91,12 +92,12 @@ export const server = {
       transferAmount: z.number(),
     }),
     handler: async (input, context) => {
-      const mintRecipientAddressInBytes32 = pad(input.destinationAddress);
+      const mintRecipientAddressInBytes32 = pad(input.destinationAddress as `0x${string}`);
       const usdcAmount = BigInt(input.transferAmount) * BigInt(10 ** 6);
       const maxFee = usdcAmount / BigInt(5000);
-      const sourceChain = await context.session?.get("sourceChain");
+      const sourceChain = await context.session?.get("sourceChain") as keyof typeof CCTP_CONFIG.contracts;
       const sourceConfig = CCTP_CONFIG.contracts[sourceChain];
-      const destinationChain = await context.session?.get("destinationChain");
+      const destinationChain = await context.session?.get("destinationChain") as keyof typeof CCTP_CONFIG.domains;
       const destinationDomain = CCTP_CONFIG.domains[destinationChain];
       const burnTxResponse = await client.createContractExecutionTransaction({
         walletId: input.sourceWalletId,
@@ -124,7 +125,7 @@ export const server = {
       let statusResponse;
       do {
         statusResponse = await client.getTransaction({
-          id: burnTxResponse?.data?.id,
+          id: burnTxResponse?.data?.id as string,
         });
         burnTxStatus = statusResponse?.data?.transaction?.state;
         console.log(burnTxStatus);
@@ -151,7 +152,7 @@ export const server = {
       maskedTxHash: z.string(),
     }),
     handler: async (input, context) => {
-      const sourceChain = await context.session?.get("sourceChain");
+      const sourceChain = await context.session?.get("sourceChain") as keyof typeof CCTP_CONFIG.domains;
       const sourceDomainId = CCTP_CONFIG.domains[sourceChain];
       const txHash = await context.session?.get("txHash");
 
@@ -188,7 +189,7 @@ export const server = {
                 return { message, attestation };
               }
             } catch (error) {
-              if (error.response?.status === 404) {
+              if ((error as any).response?.status === 404) {
                 console.log(`Attempt ${attempts}/${maxAttempts}: Attestation not ready yet`);
               } else {
                 throw error;
@@ -219,7 +220,7 @@ export const server = {
       maskedAttestation: z.string(),
     }),
     handler: async (input, context) => {
-      const destinationChain = await context.session?.get("destinationChain");
+      const destinationChain = await context.session?.get("destinationChain") as keyof typeof CCTP_CONFIG.contracts;
       const message = await context.session?.get("message");
       const attestation = await context.session?.get("attestation");
 
@@ -242,7 +243,7 @@ export const server = {
       let receiveTxStatus;
       do {
         const statusResponse = await client.getTransaction({
-          id: receiveTxResponse?.data?.id,
+          id: receiveTxResponse?.data?.id as string,
         });
         receiveTxStatus = statusResponse?.data?.transaction?.state;
         console.log("Receive transaction status:", receiveTxStatus);
