@@ -5,7 +5,7 @@ import { actions } from 'astro:actions';
 const txHash = await Astro.session?.get('txHash');
 const maskedTxHash = txHash.slice(0, 3) + "*".repeat(txHash.length - 3);
 
-const receiveAttestationResponse = Astro.getActionResult(actions.receiveAttestation);
+const receiveAttestationResponse = Astro.getActionResult(actions.receiveAttestation.receiveAttestation);
 if (receiveAttestationResponse && !receiveAttestationResponse.error) {
   Astro.session?.set('message', receiveAttestationResponse.data.message);
   Astro.session?.set('attestation', receiveAttestationResponse.data.attestation);
@@ -18,7 +18,7 @@ if (receiveAttestationResponse && !receiveAttestationResponse.error) {
 		<p>At this point, you retrieve the attestation required to complete the CCTP transfer, which is essential for verifying the burn event before proceeding with the transfer.</p>
 	</section>
   <section>
-    <form method="POST" action={actions.receiveAttestation}>
+    <form method="POST" action={actions.receiveAttestation.receiveAttestation}>
       <div class="input-wrapper">
         <label for="maskedTxHash">Transaction Hash</label>
         <input type="text" id="maskedTxHash" name="maskedTxHash" value={maskedTxHash} readonly />

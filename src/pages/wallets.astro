@@ -3,9 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WalletList from '../components/WalletList.astro';
 import { actions } from 'astro:actions';
 import { getSecret } from "astro:env/server";
+import chains from '../data/chains.json';
 
-const secretsConfigured = Boolean( getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
-const createWalletResponse = Astro.getActionResult(actions.createWallet);
+const secretsConfigured = Boolean(getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
+const createWalletResponse = Astro.getActionResult(actions.createWallet.createWallet);
 console.log(secretsConfigured);
 if (createWalletResponse && !createWalletResponse.error) {
   return Astro.redirect(`/wallets`);
@@ -21,16 +22,32 @@ if (createWalletResponse && !createWalletResponse.error) {
 
 		<section>
 			<h2>Create new wallet</h2>
-			<form action={actions.createWallet} method="POST">
+			<form action={actions.createWallet.createWallet} method="POST">
+				<fieldset class="radio-wrapper">
+					<legend>Account Type</legend>
+					<div class="radio-wrapper">
+						<input type="radio" name="accountType" id="eoa" value="eoa" checked />
+						<label for="eoa">EOA</label>
+					</div>
+					<div class="radio-wrapper">
+						<input type="radio" name="accountType" id="sca" value="sca" />
+						<label for="sca">SCA</label>
+					</div>
+				</fieldset>
 				<div class="select-wrapper">
 					<label for="blockChain">Source chain:</label>
 					<select name="blockChain" id="blockChain">
 						<option value="">-- Select --</option>
-						<option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
-						<option value="AVAX-FUJI">Avalanche Fuji</option>
-						<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+						{chains.chains.map((chain) => (
+							<option value={chain.optionValue} data-eoa={chain.eoa} data-sca={chain.sca}>{chain.name}</option>
+						))}
 					</select>
 				</div>
+				<div class="input-wrapper">
+					<label for="numberOfWallets">Number of wallets:</label>
+					<input type="number" name="numberOfWallets" id="numberOfWallets" value={1} />
+				</div>
+				<input type="hidden" name="walletSetId" value={getSecret('WALLET_SET_ID')} />
 				{secretsConfigured ? 
 					<button >Create wallet</button> :
 					<button disabled>Create wallet</button>
@@ -59,9 +76,15 @@ if (createWalletResponse && !createWalletResponse.error) {
 
 	form {
 		display: flex;
+		flex-direction: column;
 		gap: var(--space-m);
 		margin-block-end: var(--space-xs);
+		max-width: 15em;
 	}
+
+  :not(.radio-wrapper) > label {
+    display: block;
+  }
 
 	.select-wrapper {
 		display: flex;
@@ -69,10 +92,36 @@ if (createWalletResponse && !createWalletResponse.error) {
 	}
 
 	button {
-		align-self: end;
+		align-self: start;
 	}
 
 	:global(select) {
 		width: 13em;
 	}
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[name="accountType"]');
+    const select = document.getElementById('blockChain') as HTMLSelectElement;
+    const allOptions = Array.from(select.options);
+  
+    function filterChains() {
+      const selectedType = (document.querySelector('input[name="accountType"]:checked') as HTMLInputElement)?.value;
+      
+      select.innerHTML = '<option value="">-- Select --</option>';
+
+      if (selectedType) {
+        allOptions.slice(1).forEach(option => {
+          const supportsType = (option as HTMLOptionElement).dataset[selectedType] === 'true';
+          if (supportsType) {
+            select.appendChild((option as HTMLOptionElement).cloneNode(true));
+          }
+        });
+      }
+    }
+    radioButtons.forEach(radio => {
+      radio.addEventListener('change', filterChains);
+    });
+  });
+</script>

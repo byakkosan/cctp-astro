@@ -16,7 +16,7 @@ function maskString(str: string) {
   return start + maskedMiddle + end;
 }
 
-const mintUsdcResponse = Astro.getActionResult(actions.mintUsdc);
+const mintUsdcResponse = Astro.getActionResult(actions.mintUsdc.mintUsdc);
 console.log(mintUsdcResponse)
 if (mintUsdcResponse && !mintUsdcResponse.error) {
   Astro.session?.set('receiveTxId', mintUsdcResponse.data.id);
@@ -30,7 +30,7 @@ if (mintUsdcResponse && !mintUsdcResponse.error) {
 		<p>In this final step, you call the <code>receiveMessage</code> function from the MessageTransmitterV2 contract deployed on the destination chain to mint USDC on that destination chain. The function processes the attestation and mints USDC to the specified destination wallet address. Upon successful completion, the USDC will be available on the destination chain.</p>
 	</section>
   <section>
-    <form method="POST" action={actions.mintUsdc}>
+    <form method="POST" action={actions.mintUsdc.mintUsdc}>
       <div class="input-wrapper">
         <label for="recipientWalletId">Recipient Wallet ID</label>
         <input type="text" id="recipientWalletId" name="recipientWalletId" placeholder="0x5a65e51e5fae3ef18b8dbe73aaf2673fc29e42c5" required />

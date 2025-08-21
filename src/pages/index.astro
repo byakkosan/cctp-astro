@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { actions } from 'astro:actions';
 import { getSecret } from "astro:env/server";
+import chains from '../data/chains.json';
 
 const secretsConfigured = Boolean( getSecret('API_KEY')) && Boolean(getSecret('ENTITY_SECRET'));
 const initialSetupResponse = Astro.getActionResult(actions.initialSetup);
@@ -23,8 +24,9 @@ if (initialSetupResponse && !initialSetupResponse.error) {
 			<label for="sourceChain">Source chain:</label>
 			<select name="sourceChain" id="sourceChain">
 				<option value="">-- Select --</option>
-				<option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
-				<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+				{chains.chains.map((chain) => (
+					<option value={chain.optionValue}>{chain.name}</option>
+				))}
 			</select>
 		</div>
 
@@ -32,8 +34,9 @@ if (initialSetupResponse && !initialSetupResponse.error) {
 			<label for="destinationChain">Destination chain:</label>
 			<select name="destinationChain" id="destinationChain">
 				<option value="">-- Select --</option>
-				<option value="ARB-SEPOLIA">Arbitrum Sepolia</option>
-				<option value="ETH-SEPOLIA">Ethereum Sepolia</option>
+				{chains.chains.map((chain) => (
+					<option value={chain.optionValue}>{chain.name}</option>
+				))}
 			</select>
 		</div>
 

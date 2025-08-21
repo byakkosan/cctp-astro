@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { actions } from 'astro:actions';
 
 const sourceWalletId = await Astro.session?.get('sourceWalletId');
-const burnUsdcResponse = Astro.getActionResult(actions.burnUsdc);
+const burnUsdcResponse = Astro.getActionResult(actions.burnUsdc.burnUsdc);
 if (burnUsdcResponse && !burnUsdcResponse.error) {
   Astro.session?.set('txHash', burnUsdcResponse.data.txHash);
   Astro.session?.set('recipientAddress', burnUsdcResponse.data.recipientAddress);
@@ -19,7 +19,7 @@ if (burnUsdcResponse && !burnUsdcResponse.error) {
 		<p>Next, the <code>depositForBurn</code> function from TokenMessengerV2 contract is called to burn USDC on that source chain. For this step, you are interacting with the TokenMessenger contract on the source chain. </p>
 	</section>
   <section>
-    <form method="POST" action={actions.burnUsdc}>
+    <form method="POST" action={actions.burnUsdc.burnUsdc}>
       <div class="input-wrapper">
         <label for="sourceWalletId">Wallet ID</label>
         <input type="text" id="sourceWalletId" name="sourceWalletId" value={sourceWalletId} readonly />

@@ -1,0 +1,46 @@
+{
+  "chains": [
+    {
+      "name": "Arbitrum Sepolia",
+      "optionValue": "ARB-SEPOLIA",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Avalanche Fuji",
+      "optionValue": "AVAX-FUJI",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Base Sepolia",
+      "optionValue": "BASE-SEPOLIA",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Ethereum Sepolia",
+      "optionValue": "ETH-SEPOLIA",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Optimism Sepolia",
+      "optionValue": "OP-SEPOLIA",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Polygon Amoy",
+      "optionValue": "MATIC-AMOY",
+      "eoa": true,
+      "sca": true
+    },
+    {
+      "name": "Unichain Sepolia Testnet",
+      "optionValue": "UNI-SEPOLIA",
+      "eoa": true,
+      "sca": true
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { actions } from 'astro:actions';
 
-const approveUsdcResponse = Astro.getActionResult(actions.approveUsdc);
+const approveUsdcResponse = Astro.getActionResult(actions.approveUsdc.approveUsdc);
 if (approveUsdcResponse && !approveUsdcResponse.error) {
   Astro.session?.set('sourceWalletId', approveUsdcResponse.data.sourceWalletId);
 	Astro.session?.set('authorizedAmount', approveUsdcResponse.data.authorizedAmount);
@@ -18,7 +18,7 @@ if (approveUsdcResponse && !approveUsdcResponse.error) {
 	</section>
   <section>
     
-    <form method="POST" action={actions.approveUsdc}>
+    <form method="POST" action={actions.approveUsdc.approveUsdc}>
       <div class="input-wrapper">
         <label for="sourceWalletId">Wallet ID</label>
         <input type="text" id="sourceWalletId" name="sourceWalletId" placeholder="0x5a65e51e5fae3ef18b8dbe73aaf2673fc29e42c5" required />
